@@ -8,33 +8,53 @@ namespace Module14
     {
         public static void Main()
         {
-            // Список студентов
-            var students = new List<Student>
+            var contacts = new List<Contact>()
             {
-                new Student {Name="Андрей", Age=23, Languages = new List<string> {"английский", "немецкий" }},
-                new Student {Name="Сергей", Age=27, Languages = new List<string> {"английский", "французский" }},
-                new Student {Name="Дмитрий", Age=29, Languages = new List<string> {"английский", "испанский" }}
+                new Contact() { Name = "Андрей", Phone = 7999945005 },
+                new Contact() { Name = "Сергей", Phone = 799990455 },
+                new Contact() { Name = "Иван", Phone = 79999675 },
+                new Contact() { Name = "Игорь", Phone = 8884994 },
+                new Contact() { Name = "Анна", Phone = 665565656 },
+                new Contact() { Name = "Василий", Phone = 3434 }
             };
 
-            // Список курсов
-            var coarses = new List<Coarse>
+            while (true)
             {
-                new Coarse {Name="Язык программирования C#", StartDate = new DateTime(2020, 12, 20)},
-                new Coarse {Name="Язык SQL и реляционные базы данных", StartDate = new DateTime(2020, 12, 15)},
-            };
+                var keyChar = Console.ReadKey().KeyChar;
+                Console.Clear();
 
-            // добавим студентов в курсы
-            var studentsWithCoarses = from stud in students 
-                                      where stud.Age < 29
-                                      where stud.Languages.Contains("английский")
-                                      let birthYear = DateTime.Now.Year - stud.Age
-                                      from coarse in coarses
-                                      where coarse.Name.Contains("C#")
-                                      select new { Name = stud.Name, BirthYear = birthYear, CoarseName = coarse.Name };
+                if (!Char.IsDigit(keyChar))
+                {
+                    Console.WriteLine("Ошибка ввода, введите число");
+                }
+                else
+                {
+                    IEnumerable<Contact> page = null;
 
-            // выведем результат
-            foreach (var stud in studentsWithCoarses)
-                Console.WriteLine($"Студент {stud.Name} ({stud.BirthYear}) добавлен курс {stud.CoarseName}");
+                    switch (keyChar)
+                    {
+                        case ('1'):
+                            page = contacts.Take(2);
+                            break;
+                        case ('2'):
+                            page = contacts.Skip(2).Take(2);
+                            break;
+                        case ('3'):
+                            page = contacts.Skip(4).Take(2);
+                            break;
+
+                            if (page == null)
+                            {
+                                Console.WriteLine($"Ошибка ввода, страницы {keyChar} не существует");
+                                continue;
+                            }
+
+                            
+                            foreach (var contact in page)
+                                Console.WriteLine(contact.Name + " " + contact.Phone);
+                    }
+                }
+            }
         }
     }
 }
