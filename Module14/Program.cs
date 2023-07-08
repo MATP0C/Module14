@@ -1,6 +1,4 @@
-﻿
-
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace Module14
 {
@@ -17,6 +15,8 @@ namespace Module14
             phoneBook.Add(new Contact("Сергей", "Брин", 799900000013, "serg@example.com"));
             phoneBook.Add(new Contact("Иннокентий", "Смоктуновский", 799900000013, "innokentii@example.com"));
 
+            var sortedphoneBook = from s in phoneBook orderby s.Name, s.LastName select s;
+
             while (true)
             {
                 var input = Console.ReadKey().KeyChar;
@@ -30,7 +30,7 @@ namespace Module14
                 }
                 else
                 {
-                    var pageContent = phoneBook.Skip((pageNumber - 1) * 2).Take(2);
+                    var pageContent = sortedphoneBook.Skip((pageNumber - 1) * 2).Take(2);
                     Console.WriteLine();
 
                     foreach (var entry in pageContent)
