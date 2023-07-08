@@ -6,55 +6,54 @@ namespace Module14
 {
     class Program
     {
-        public static void Main()
+        public static void Main(string[] args)
         {
-            var contacts = new List<Contact>()
-            {
-                new Contact() { Name = "Андрей", Phone = 7999945005 },
-                new Contact() { Name = "Сергей", Phone = 799990455 },
-                new Contact() { Name = "Иван", Phone = 79999675 },
-                new Contact() { Name = "Игорь", Phone = 8884994 },
-                new Contact() { Name = "Анна", Phone = 665565656 },
-                new Contact() { Name = "Василий", Phone = 3434 }
-            };
+            var phoneBook = new List<Contact>();
+
+            phoneBook.Add(new Contact("Игорь", "Николаев", 79990000001, "igor@example.com"));
+            phoneBook.Add(new Contact("Сергей", "Довлатов", 79990000010, "serge@example.com"));
+            phoneBook.Add(new Contact("Анатолий", "Карпов", 79990000011, "anatoly@example.com"));
+            phoneBook.Add(new Contact("Валерий", "Леонтьев", 79990000012, "valera@example.com"));
+            phoneBook.Add(new Contact("Сергей", "Брин", 799900000013, "serg@example.com"));
+            phoneBook.Add(new Contact("Иннокентий", "Смоктуновский", 799900000013, "innokentii@example.com"));
 
             while (true)
             {
-                var keyChar = Console.ReadKey().KeyChar;
-                Console.Clear();
+                var input = Console.ReadKey().KeyChar;
 
-                if (!Char.IsDigit(keyChar))
+                var parsed = Int32.TryParse(input.ToString(), out int pageNumber);
+
+                if (!parsed || pageNumber < 1 || pageNumber > 3)
                 {
-                    Console.WriteLine("Ошибка ввода, введите число");
+                    Console.WriteLine();
+                    Console.WriteLine("Страницы не существует");
                 }
                 else
                 {
-                    IEnumerable<Contact> page = null;
+                    var pageContent = phoneBook.Skip((pageNumber - 1) * 2).Take(2);
+                    Console.WriteLine();
 
-                    switch (keyChar)
-                    {
-                        case ('1'):
-                            page = contacts.Take(2);
-                            break;
-                        case ('2'):
-                            page = contacts.Skip(2).Take(2);
-                            break;
-                        case ('3'):
-                            page = contacts.Skip(4).Take(2);
-                            break;
+                    foreach (var entry in pageContent)
+                        Console.WriteLine(entry.Name + " " + entry.LastName + ": " + entry.PhoneNumber);
 
-                            if (page == null)
-                            {
-                                Console.WriteLine($"Ошибка ввода, страницы {keyChar} не существует");
-                                continue;
-                            }
-
-                            
-                            foreach (var contact in page)
-                                Console.WriteLine(contact.Name + " " + contact.Phone);
-                    }
+                    Console.WriteLine();
                 }
             }
         }
     }
-}
+    public class Contact
+    {
+        public Contact(string name, string lastName, long phoneNumber, String email)
+        {
+            Name = name;
+            LastName = lastName;
+            PhoneNumber = phoneNumber;
+            Email = email;
+        }
+
+        public String Name { get; }
+        public String LastName { get; }
+        public long PhoneNumber { get; }
+        public String Email { get; }
+    }
+}         
